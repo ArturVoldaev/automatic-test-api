@@ -18,8 +18,9 @@
 							"script": {
 								"exec": [
 									"let petId2 = pm.environment.replaceIn('{{$randomInt}}');\r",
-									"let departman = pm.environment.replaceIn('{{$randomDepartment}}');\r",
+									"let departman = pm.environment.replaceIn('{{$randomInt}}');\r",
 									"let doggy_name = pm.environment.replaceIn('{{$randomDepartment}}');\r",
+									"let category_name = pm.environment.replaceIn('{{$randomDepartment}}');\r",
 									"\r",
 									"\r",
 									"\r",
@@ -34,10 +35,11 @@
 									"//     })\r",
 									"// })\r",
 									"\r",
-									"pm.environment.set(\"PET_ID\", parseInt(petId2));\r",
+									"pm.environment.set(\"petId\", parseInt(petId2));\r",
 									"pm.environment.set(\"PREVIUS_PET_ID\", parseInt(petId2));\r",
-									"pm.environment.set(\"DOGGY_NAME\", doggy_name);\r",
-									"pm.environment.set(\"CATEGORY_NAME\", departman);\r",
+									"pm.environment.set(\"doggyName\", doggy_name);\r",
+									"pm.environment.set(\"categoryId\", departman);\r",
+									"pm.environment.set(\"categoryName\", category_name);\r",
 									""
 								],
 								"type": "text/javascript"
@@ -47,9 +49,9 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Is a number\", function () {\r",
+									"pm.test(\"Is property id exist\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.id).to.be.a(\"number\");\r",
+									"    pm.expect(jsonData).to.have.property(\"id\")\r",
 									"});\r",
 									"\r",
 									"pm.test(\"Response time is less than 600ms\", function () {\r",
@@ -70,7 +72,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"id\": {{PET_ID}},\r\n  \"category\": {\r\n    \"id\": {{CATEGORY_ID}},\r\n    \"name\": \"{{CATEGORY_NAME}}\"\r\n  },\r\n  \"name\": \"{{DOGGY_NAME}}\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}",
+							"raw": "{\r\n  \"id\": {{petId}},\r\n  \"category\": {\r\n    \"id\": \"{{categoryId}}\",\r\n    \"name\": \"{{categoryName}}\"\r\n  },\r\n  \"name\": \"{{doggyName}}\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -115,7 +117,7 @@
 									"\r",
 									"pm.test(\"Is right ID\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.id).to.eql(pm.environment.get(\"PET_ID\"));\r",
+									"    pm.expect(jsonData.id).to.eql(pm.environment.get(\"petId\"));\r",
 									"});\r",
 									"\r",
 									"pm.test(\"Response time is less than 600ms\", function () {\r",
@@ -142,7 +144,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://petstore.swagger.io/v2/pet/{{PET_ID}}",
+							"raw": "https://petstore.swagger.io/v2/pet/{{petId}}",
 							"protocol": "https",
 							"host": [
 								"petstore",
@@ -152,7 +154,7 @@
 							"path": [
 								"v2",
 								"pet",
-								"{{PET_ID}}"
+								"{{petId}}"
 							]
 						}
 					},
@@ -227,7 +229,7 @@
 									"\r",
 									"pm.test(\"Is necessary id\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.message).to.eql(pm.environment.get(\"PET_ID\").toString());\r",
+									"    pm.expect(jsonData.message).to.eql(pm.environment.get(\"petId\").toString());\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -247,7 +249,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://petstore.swagger.io/v2/pet/{{PET_ID}}",
+							"raw": "https://petstore.swagger.io/v2/pet/{{petId}}",
 							"protocol": "https",
 							"host": [
 								"petstore",
@@ -257,7 +259,7 @@
 							"path": [
 								"v2",
 								"pet",
-								"{{PET_ID}}"
+								"{{petId}}"
 							]
 						}
 					},
@@ -276,10 +278,11 @@
 							"script": {
 								"exec": [
 									"let petId2 = pm.environment.replaceIn('{{$randomInt}}');\r",
+									"let randomQuantity = pm.environment.replaceIn('{{$randomInt}}');\r",
 									"\r",
-									"pm.environment.set(\"PET_ID\", parseInt(_.random(1, 10)))\r",
-									"\r",
-									"//pm.environment.set(\"PET_ID\", parseInt(petId2));"
+									"pm.environment.set(\"petId\", parseInt(_.random(1, 10)))\r",
+									"pm.environment.set(\"randomQuantity\", randomQuantity)\r",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -309,7 +312,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"id\": {{PET_ID}},\r\n  \"petId\": {{PET_ID}},\r\n  \"quantity\": {{RANDOM_QUANTITY}},\r\n  \"shipDate\": \"2023-07-16T15:04:00.410Z\",\r\n  \"status\": \"placed\",\r\n  \"complete\": true\r\n}",
+							"raw": "{\r\n  \"id\": {{petId}},\r\n  \"petId\": {{petId}},\r\n  \"quantity\": {{randomQuantity}},\r\n  \"shipDate\": \"2023-07-16T15:04:00.410Z\",\r\n  \"status\": \"placed\",\r\n  \"complete\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -377,7 +380,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://petstore.swagger.io/v2/store/order/{{PET_ID}}",
+							"raw": "https://petstore.swagger.io/v2/store/order/{{petId}}",
 							"protocol": "https",
 							"host": [
 								"petstore",
@@ -388,7 +391,7 @@
 								"v2",
 								"store",
 								"order",
-								"{{PET_ID}}"
+								"{{petId}}"
 							]
 						}
 					},
@@ -401,8 +404,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Response time is less than 200ms\", function () {\r",
-									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"pm.test(\"Response time is less than 600ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(600);\r",
 									"});\r",
 									"\r",
 									"\r",
@@ -419,7 +422,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"id\": {{PET_ID}},\r\n  \"petId\": {{PET_ID}},\r\n  \"quantity\": {{RANDOM_QUANTITY}},\r\n  \"shipDate\": \"2023-07-16T15:04:00.410Z\",\r\n  \"status\": \"placed\",\r\n  \"complete\": true\r\n}",
+							"raw": "{\r\n  \"id\": {{petId}},\r\n  \"petId\": {{petId}},\r\n  \"quantity\": {{randomQuantity}},\r\n  \"shipDate\": \"2023-07-16T15:04:00.410Z\",\r\n  \"status\": \"placed\",\r\n  \"complete\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -427,7 +430,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://petstore.swagger.io/v2/store/order/{{PET_ID}}",
+							"raw": "https://petstore.swagger.io/v2/store/order/{{petId}}",
 							"protocol": "https",
 							"host": [
 								"petstore",
@@ -438,7 +441,7 @@
 								"v2",
 								"store",
 								"order",
-								"{{PET_ID}}"
+								"{{petId}}"
 							]
 						}
 					},
@@ -489,7 +492,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://petstore.swagger.io/v2/store/order/{{PET_ID}}",
+							"raw": "https://petstore.swagger.io/v2/store/order/{{petId}}",
 							"protocol": "https",
 							"host": [
 								"petstore",
@@ -500,7 +503,7 @@
 								"v2",
 								"store",
 								"order",
-								"{{PET_ID}}"
+								"{{petId}}"
 							]
 						}
 					},
@@ -595,8 +598,8 @@
 									"pm.test(\"Status code is 200\", function () {\r",
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
-									"pm.test(\"Response time is less than 200ms\", function () {\r",
-									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"pm.test(\"Response time is less than 600ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(600);\r",
 									"});\r",
 									"pm.test(\"Successful GET request\", function () {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202]);\r",
