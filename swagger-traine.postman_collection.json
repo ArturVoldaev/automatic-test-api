@@ -23,6 +23,16 @@
 									"let category_name = pm.environment.replaceIn('{{$randomDepartment}}');\r",
 									"\r",
 									"\r",
+									"parseInt(_.random(1, 10))\r",
+									"\r",
+									"let randomStatus = () => {\r",
+									"    let index = parseInt(_.random(0, 2))\r",
+									"    let arrayStatus = [\"available\", \"pending\", \"sold\"]\r",
+									"    return arrayStatus[index]\r",
+									"}\r",
+									"\r",
+									"\r",
+									"\r",
 									"\r",
 									"// pm.sendRequest(\"https://petstore.swagger.io/v2/pet/\" + petId2, function(err, response){\r",
 									"//     let getPet = response.json();\r",
@@ -40,6 +50,9 @@
 									"pm.environment.set(\"doggyName\", doggy_name);\r",
 									"pm.environment.set(\"categoryId\", departman);\r",
 									"pm.environment.set(\"categoryName\", category_name);\r",
+									"pm.environment.set(\"petStatus\", randomStatus());\r",
+									"\r",
+									"\r",
 									""
 								],
 								"type": "text/javascript"
@@ -60,7 +73,7 @@
 									"\r",
 									"pm.test(\"Is pet available\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.status).to.eql(\"available\");\r",
+									"    pm.expect(jsonData.status).to.eql(pm.environment.get(\"petStatus\"));\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -72,7 +85,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"id\": {{petId}},\r\n  \"category\": {\r\n    \"id\": \"{{categoryId}}\",\r\n    \"name\": \"{{categoryName}}\"\r\n  },\r\n  \"name\": \"{{doggyName}}\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"available\"\r\n}",
+							"raw": "{\r\n  \"id\": {{petId}},\r\n  \"category\": {\r\n    \"id\": \"{{categoryId}}\",\r\n    \"name\": \"{{categoryName}}\"\r\n  },\r\n  \"name\": \"{{doggyName}}\",\r\n  \"photoUrls\": [\r\n    \"string\"\r\n  ],\r\n  \"tags\": [\r\n    {\r\n      \"id\": 0,\r\n      \"name\": \"string\"\r\n    }\r\n  ],\r\n  \"status\": \"{{petStatus}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -260,6 +273,79 @@
 								"v2",
 								"pet",
 								"{{petId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-order-by-status",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let randomStatus = () => {\r",
+									"    let index = parseInt(_.random(0, 2))\r",
+									"    let arrayStatus = [\"available\", \"pending\", \"sold\"]\r",
+									"    return arrayStatus[index]\r",
+									"}\r",
+									"\r",
+									"pm.environment.set(\"petStatus\", randomStatus());"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response time is less than 600ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(600);\r",
+									"\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://petstore.swagger.io/v2/pet/findByStatus?status={{petStatus}}",
+							"protocol": "https",
+							"host": [
+								"petstore",
+								"swagger",
+								"io"
+							],
+							"path": [
+								"v2",
+								"pet",
+								"findByStatus"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "{{petStatus}}"
+								}
 							]
 						}
 					},
