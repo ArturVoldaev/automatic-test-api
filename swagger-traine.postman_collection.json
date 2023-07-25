@@ -468,7 +468,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/post-dog/img-1190-min.jpg"
+									"src": "./post-dog/img-1190-min.jpg"
 								},
 								{
 									"key": "additionalMetadata",
