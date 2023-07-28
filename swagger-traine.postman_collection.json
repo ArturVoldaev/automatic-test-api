@@ -1059,6 +1059,46 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "get-user-by-name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response time is less than 600ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(600);\r",
+									"\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://petstore.swagger.io/v2/user/{{RANDOM_FIRST_NAME}}",
+							"protocol": "https",
+							"host": [
+								"petstore",
+								"swagger",
+								"io"
+							],
+							"path": [
+								"v2",
+								"user",
+								"{{RANDOM_FIRST_NAME}}"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
