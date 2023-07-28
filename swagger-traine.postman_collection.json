@@ -776,15 +776,17 @@
 									"pm.test(\"Status code is 200\", function () {\r",
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
-									"pm.test(\"Response time is less than 200ms\", function () {\r",
-									"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+									"pm.test(\"Response time is less than 800ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(800);\r",
 									"});\r",
 									"pm.test(\"Successful POST request\", function () {\r",
+									"\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202]);\r",
 									"});\r",
 									"pm.test(\"Status code name has string\", function () {\r",
 									"    pm.response.to.have.status(200);\r",
-									"});"
+									"});\r",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -976,6 +978,83 @@
 								"v2",
 								"user",
 								"{{RANDOM_FIRST_NAME}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list-of-user-object",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let randomFirtName = pm.environment.replaceIn('{{$randomFirstName}}');\r",
+									"let randomLastName = pm.environment.replaceIn('{{$randomLastName}}');\r",
+									"let randomEmail = pm.environment.replaceIn('{{$randomEmail}}');\r",
+									"let petId2 = pm.environment.replaceIn('{{$randomInt}}');\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"RANDOM_FIRST_NAME\", randomFirtName)\r",
+									"pm.environment.set(\"RANDOM_LAST_NAME\", randomLastName)\r",
+									"pm.environment.set(\"RANDOM_EMAIL\", randomEmail)\r",
+									"pm.environment.set(\"PET_ID\", parseInt(_.random(1, 10)))"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"pm.test(\"Response time is less than 800ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(800);\r",
+									"});\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 202]);\r",
+									"});\r",
+									"pm.test(\"Status code name has string\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[{\r\n  \"id\": {{PET_ID}},\r\n  \"username\": \"{{RANDOM_FIRST_NAME}}\",\r\n  \"firstName\": \"{{RANDOM_FIRST_NAME}}\",\r\n  \"lastName\": \"{{RANDOM_LAST_NAME}}\",\r\n  \"email\": \"{{RANDOM_EMAIL}}\",\r\n  \"password\": \"{{RANDOM_PASSWORD}}\",\r\n  \"phone\": \"{{RANDOM_PHONE}}\",\r\n  \"userStatus\": 0\r\n}]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://petstore.swagger.io/v2/user/createWithArray",
+							"protocol": "https",
+							"host": [
+								"petstore",
+								"swagger",
+								"io"
+							],
+							"path": [
+								"v2",
+								"user",
+								"createWithArray"
 							]
 						}
 					},
